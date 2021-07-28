@@ -1,0 +1,55 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  username      String   @unique
+  email         String   @unique
+  emailVerified Boolean  @default(false) @map("email_verification")
+  password      String
+  posts         Post[]
+  role          Role     @default(MEMBER)
+  session       Session?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("user")
+}
+
+model Session {
+  id                  String   @id @default(uuid())
+  user                User     @relation(fields: [userId], references: [id])
+  userId              String   @unique @map("user_id")
+  csrfToken           String?  @map("csrf_token") @db.VarChar(128)
+  csrfTokenExpires    String?  @map("csrf_token_expires") @db.VarChar(15)
+  refreshToken        String?  @map("refresh_token") @db.VarChar(1024)
+  refreshTokenExpires String?  @map("refresh_token_expires") @db.VarChar(15)
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("session")
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  String   @map("author_id")
+  title     String
+  content   String   @db.MediumText
+  published Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("post")
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+}
