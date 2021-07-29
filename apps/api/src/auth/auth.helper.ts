@@ -39,7 +39,7 @@ export const generateRsaKeyPair = () => {
 
 export const getAllTokens = (request: Request) => {
   const accessToken = request.cookies[Token.ACCESS_TOKEN];
-  const csrfToken = request.headers['x-csrf-token'] as string;
+  const csrfToken = request.headers[Token.CSRF_TOKEN] as string;
   const refreshToken = request.cookies[Token.REFRESH_TOKEN];
 
   const tokens: ITokens = {

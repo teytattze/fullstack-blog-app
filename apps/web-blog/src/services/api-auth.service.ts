@@ -1,17 +1,11 @@
-import { ajax } from '../lib/ajax';
-import axios from 'axios';
-import { ILoginDto } from '../shared/interfaces/auth.interface';
+import { ajax } from 'src/lib/ajax';
+import { ILoginDto } from 'src/shared/interfaces/auth.interface';
 
 const baseUrl = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/auth`;
 
 export const login = async (data: ILoginDto) => {
   try {
-    const res = await ajax.post(
-      `${baseUrl}/login`,
-      { ...data },
-      { withCredentials: true },
-    );
-    return res;
+    return await ajax.post(`${baseUrl}/login`, { ...data });
   } catch (err) {
     return err.response;
   }
@@ -19,12 +13,7 @@ export const login = async (data: ILoginDto) => {
 
 export const logout = async () => {
   try {
-    const res = await axios.post(
-      `${baseUrl}/logout`,
-      {},
-      { withCredentials: true },
-    );
-    return res;
+    return await ajax.post(`${baseUrl}/logout`);
   } catch (err) {
     return err.response;
   }
@@ -32,12 +21,7 @@ export const logout = async () => {
 
 export const refreshAccess = async () => {
   try {
-    const res = await ajax.post(
-      `${baseUrl}/refresh-access`,
-      {},
-      { withCredentials: true },
-    );
-    return res;
+    return await ajax.post(`${baseUrl}/refresh-access`);
   } catch (err) {
     return err.response;
   }
@@ -45,12 +29,7 @@ export const refreshAccess = async () => {
 
 export const refreshCsrf = async () => {
   try {
-    const res = await axios.post(
-      `${baseUrl}/refresh-csrf`,
-      {},
-      { withCredentials: true },
-    );
-    return res;
+    return await ajax.post(`${baseUrl}/refresh-csrf`);
   } catch (err) {
     return err.response;
   }

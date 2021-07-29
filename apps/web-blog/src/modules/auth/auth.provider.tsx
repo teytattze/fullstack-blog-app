@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { ICookiesUser } from '../../shared/interfaces/users.interface';
-import { checkAuthentication } from './auth.helper';
+import { Snackbar } from 'src/components';
+import { ICookiesUser } from 'src/shared/interfaces/users.interface';
+import { checkAuthentication } from './auth.helpers';
 
 const initialUser: ICookiesUser = {
   id: '',
@@ -17,6 +18,8 @@ type AuthContextState = {
   setUser: (user: ICookiesUser) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
+  setLoginState: () => void;
+  setLogoutState: () => void;
 };
 
 export const AuthContext = React.createContext<AuthContextState>({
@@ -26,6 +29,8 @@ export const AuthContext = React.createContext<AuthContextState>({
   setUser: () => null,
   isLoading: true,
   setIsLoading: () => null,
+  setLoginState: () => null,
+  setLogoutState: () => null,
 });
 
 type AuthProviderProps = {
@@ -36,6 +41,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
   const [user, setUser] = React.useState<ICookiesUser>(initialUser);
+
+  const [snackbar, setSnackbar] = React.useState({
+    login: false,
+    logout: false,
+  });
+
+  const handleLoginSnackbar = () => {
+    setSnackbar({
+      ...snackbar,
+      login: !snackbar.login,
+    });
+  };
+
+  const handleLogoutSnackbar = () => {
+    setSnackbar({
+      ...snackbar,
+      logout: !snackbar.logout,
+    });
+  };
 
   React.useEffect(() => {
     const initialState = () => {
@@ -57,7 +81,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setIsLoading(false);
     };
     initialState();
-  }, []);
+  }, [isAuthenticated]);
+
+  const setLoginState = () => {
+    setIsAuthenticated(true);
+    handleLoginSnackbar();
+  };
+
+  const setLogoutState = () => {
+    setUser(initialUser);
+    setIsAuthenticated(false);
+    handleLogoutSnackbar();
+  };
 
   return (
     <AuthContext.Provider
@@ -68,9 +103,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser,
         isLoading,
         setIsLoading,
+        setLoginState,
+        setLogoutState,
       }}
     >
       {children}
+      <Snackbar
+        open={snackbar.login}
+        handleClose={handleLoginSnackbar}
+        type="success"
+        message="Login successfully!"
+      />
+      <Snackbar
+        open={snackbar.logout}
+        handleClose={handleLogoutSnackbar}
+        type="success"
+        message="Logout successfully!"
+      />
     </AuthContext.Provider>
   );
 }

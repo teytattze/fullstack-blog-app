@@ -39,9 +39,10 @@ export class AuthenticationService {
         accessToken,
         csrfToken: newSession.csrfToken,
         refreshToken: newSession.refreshToken,
-        ...jwtPayload,
+        jwtPayload,
       };
     }
+
     return {
       accessToken,
       csrfToken: currSession.csrfToken,

@@ -1,10 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { getCsrfToken } from 'src/modules/auth/auth.helper';
+import { getCsrfToken } from 'src/modules/auth/auth.helpers';
+import { refreshAccess } from 'src/services/api-auth.service';
+
+export const apiClientWithoutAuth = axios;
 
 export const apiClient = axios.create({
-  headers: {
-    'x-csrf-token': getCsrfToken(),
-  },
+  withCredentials: true,
 });
 
 export interface AjaxOptions<Result = any>

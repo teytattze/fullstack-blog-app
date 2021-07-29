@@ -16,7 +16,14 @@ cache.compat = true;
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(
     () =>
-      new QueryClient({ defaultOptions: { queries: { staleTime: 15000 } } }),
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 15000,
+          },
+          mutations: {},
+        },
+      }),
   );
 
   return (

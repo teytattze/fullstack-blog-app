@@ -2,7 +2,6 @@ import {
   Button,
   Box,
   Divider,
-  Link,
   Paper,
   Stack,
   TextField,
@@ -44,7 +43,12 @@ export function SignUpForm() {
         sx={{ color: 'text.secondary' }}
       >
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Image src="/images/google.svg" width={24} height={24} />
+          <Image
+            src="/images/google.svg"
+            alt="Google icon"
+            width={24}
+            height={24}
+          />
           <Typography variant="body2">Sign In with Google</Typography>
         </Stack>
       </Button>

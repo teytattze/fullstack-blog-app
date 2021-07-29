@@ -13,7 +13,7 @@ import { JwtAuthenticationGuard } from '../../common/guards/jwt-authentication.g
 import { UserLoginDto } from './authentication.dto';
 import { AuthenticationService } from './authentication.service';
 import { CSRF_TOKEN_TTL, REFRESH_TOKEN_TTL } from '../session/session.const';
-import { RequestWithUser, Token } from './authentication.interface';
+import { Token } from './authentication.interface';
 import { getAllTokens } from '../auth.helper';
 
 @Controller('auth')
@@ -28,6 +28,8 @@ export class AuthenticationController {
   ) {
     const result = await this.authenticationService.login(body);
 
+    const jwtData = await JSON.stringify(result.jwtPayload);
+
     res.cookie(Token.ACCESS_TOKEN, result.accessToken, {
       httpOnly: true,
     });
@@ -36,7 +38,7 @@ export class AuthenticationController {
       httpOnly: true,
       maxAge: (REFRESH_TOKEN_TTL - 60) * 1000,
     });
-    res.cookie('jwt-data', JSON.stringify(result.jwtPayload), {
+    res.cookie('jwt-data', jwtData, {
       maxAge: (REFRESH_TOKEN_TTL - 60) * 1000,
     });
 
@@ -84,14 +86,14 @@ export class AuthenticationController {
   @UseGuards(JwtAuthenticationGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
-  async logout(
-    @Req() req: RequestWithUser,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async logout(@Req() req, @Res({ passthrough: true }) res: Response) {
     res.clearCookie(Token.ACCESS_TOKEN);
     res.clearCookie(Token.CSRF_TOKEN);
     res.clearCookie(Token.REFRESH_TOKEN);
     res.clearCookie('jwt-data');
-    return await this.authenticationService.logout(req.user.id);
+
+    const user = JSON.parse(req.cookies['jwt-data']);
+
+    return await this.authenticationService.logout(user.userId);
   }
 }

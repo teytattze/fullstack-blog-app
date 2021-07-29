@@ -4,7 +4,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { RequestWithUser } from '../../auth/authentication/authentication.interface';
 import { JwtService } from '../../auth/jwt/jwt.service';
 import { SessionService } from '../../auth/session/session.service';
 import { AuthErrors } from '../../auth/auth.error';
@@ -18,7 +17,7 @@ export class JwtAuthenticationGuard implements CanActivate {
   ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
-    const req = ctx.switchToHttp().getRequest<RequestWithUser>();
+    const req = ctx.switchToHttp().getRequest();
     const { accessToken, csrfToken } = getAllTokens(req);
 
     if (!accessToken && !csrfToken) {

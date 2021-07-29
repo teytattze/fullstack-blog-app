@@ -19,11 +19,8 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { UrlObject } from 'url';
 import { useAuth } from 'src/hooks/use-auth';
-import {
-  logout,
-  refreshAccess,
-  refreshCsrf,
-} from 'src/services/api-auth.service';
+import { useLogout } from 'src/modules/auth/auth.queries';
+import * as _ from 'lodash';
 
 export function Navbar() {
   const theme = useTheme();
@@ -40,6 +37,8 @@ export function Navbar() {
         backgroundColor: 'white',
         position: 'fixed',
         top: 0,
+        borderBottom: 1,
+        borderColor: 'divider',
       }}
     >
       <Container
@@ -90,6 +89,8 @@ export function DefaultLinks({
   isDefault,
   isAuthenticated,
 }: DefaultLinksProps) {
+  const { mutate: logout } = useLogout();
+  const { setLogoutState } = useAuth();
   const router = useRouter();
 
   const checkPath = (pathname: string) => {
@@ -137,7 +138,16 @@ export function DefaultLinks({
             </>
           )}
           <Button
-            onClick={refreshCsrf}
+            onClick={() => {
+              logout(null, {
+                onSuccess: (res) => {
+                  if (!_.has(res.data, 'errorCode')) {
+                    setLogoutState();
+                  }
+                },
+              });
+              setLogoutState();
+            }}
             variant="outlined"
             size={isDefault ? 'medium' : 'small'}
           >
