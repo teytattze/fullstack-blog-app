@@ -1,6 +1,8 @@
 import { Stack, Typography } from '@material-ui/core';
+// import { useIndexPosts } from '../posts.queries';
 
 export function PostListing() {
+  // const { data, isLoading } = useIndexPosts({ isPublished: true });
   return (
     <Stack direction="column" spacing={4}>
       <PostItem />

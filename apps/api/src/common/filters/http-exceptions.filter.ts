@@ -11,8 +11,6 @@ export class HttpExceptionFilter extends BaseExceptionFilter {
   ) {
     const response = host.switchToHttp().getResponse();
     const responseError = createGeneralExceptionError(err);
-    response
-      .status(responseError.statusCode)
-      .send({ ...responseError, isSuccess: false });
+    response.status(responseError.statusCode).send({ ...responseError });
   }
 }

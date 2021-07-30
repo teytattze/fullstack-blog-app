@@ -54,7 +54,6 @@ export const createGeneralExceptionError = (
       message: errorResponse.message,
       errorCode: errorResponse.errorCode || Errors.UNKNOWN_ERROR.errorCode,
       statusCode: error.getStatus(),
-      description: errorResponse.description || null,
     };
   }
 

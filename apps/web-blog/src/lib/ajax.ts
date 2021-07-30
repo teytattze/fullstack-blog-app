@@ -1,17 +1,25 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { getCsrfToken } from 'src/modules/auth/auth.helpers';
-import { refreshAccess } from 'src/services/api-auth.service';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-export const apiClientWithoutAuth = axios;
+export const apiClientWithoutAuth = axios.create({});
 
-export const apiClient = axios.create({
+export const apiWithAuth = axios.create({
   withCredentials: true,
 });
 
-export interface AjaxOptions<Result = any>
-  extends Omit<AxiosRequestConfig, 'data'> {
-  data?: (res: AxiosResponse) => Result | Promise<Result>;
+export interface AjaxError extends Omit<AxiosError, 'response'> {
+  response: AxiosResponse<{
+    message: string;
+    errorCode: string;
+    statusCode: number;
+  }>;
 }
+
+export interface AjaxOptions<Result = any> extends AxiosRequestConfig {
+  select?: (res: AxiosResponse) => Result | Promise<Result>;
+  url: string;
+}
+
+const defaultSelect: AjaxOptions['select'] = (res) => res.data;
 
 /**
  * a wrapper over `apiClient` that works well with `react-query` to allow request cancellation.
@@ -20,15 +28,19 @@ export interface AjaxOptions<Result = any>
  * using `select` options. Do not chain the promise with `.then` as it will not allow request
  * cancellation by `react-query` anymore.
  */
-const ajaxFn = <Result = any>({ ...config }: AjaxOptions<Result>) => {
+const ajaxFn = <Result = any>({
+  select = defaultSelect,
+  ...config
+}: AjaxOptions<Result>) => {
   const cancelSource = axios.CancelToken.source();
 
   const requestPromise = new Promise<Result>((fulfill, reject) => {
-    apiClient({
+    apiWithAuth({
       cancelToken: cancelSource.token,
       ...config,
     })
-      .then((res) => fulfill(res.data))
+      .then(select)
+      .then(fulfill)
       .catch((err) => {
         if (!err || !axios.isCancel(err)) {
           reject(err);
@@ -41,14 +53,17 @@ const ajaxFn = <Result = any>({ ...config }: AjaxOptions<Result>) => {
   });
 };
 
-const ajaxAll = <Result = any>(ajaxs: Array<ReturnType<typeof ajaxFn>>) => {
-  const result = Promise.all(ajaxs as Array<Promise<Result>>);
-  return Object.assign(result, {
-    cancel: () => ajaxs.forEach((aj) => aj.cancel()),
-  });
-};
-
 type AjaxHelperOptions = Omit<AjaxOptions, 'url' | 'method'>;
+
+/**
+ * client to make api calls that works well with `react-query` to allow request cancellation.
+ *
+ * It will get the body of the response by default, but you can overwrite what is the response
+ * using `select` options. Do not chain the promise with `.then` as it will not allow request
+ * cancellation by `react-query` anymore.
+ *
+ * It includes `get`, `post`, `put`, `patch`, `delete`, and `isAxiosError` method.
+ */
 
 export const ajax = Object.assign(ajaxFn, {
   get: <Result = any>(url: string, options: AjaxHelperOptions = {}) =>
@@ -70,5 +85,4 @@ export const ajax = Object.assign(ajaxFn, {
   ) => ajaxFn<Result>({ url, data, method: 'patch', ...options }),
   delete: <Result = any>(url: string, options: AjaxHelperOptions = {}) =>
     ajaxFn<Result>({ url, method: 'delete', ...options }),
-  all: ajaxAll,
 });

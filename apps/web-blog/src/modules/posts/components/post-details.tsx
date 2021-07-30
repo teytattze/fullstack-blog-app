@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   Button,
-  Box,
   Chip,
   Divider,
   IconButton,
@@ -10,7 +9,7 @@ import {
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import EditIcon from '@material-ui/icons/Edit';
-import { StackedBarChartRounded } from '@material-ui/icons';
+import { HasPermission } from 'src/modules/auth';
 
 export function PostDetails() {
   const [isEdit, setIsEdit] = React.useState(false);
@@ -30,23 +29,25 @@ export function PostDetails() {
         }}
       >
         <Stack direction="row" alignItems="center" spacing={2}>
-          {isEdit ? (
-            <IconButton onClick={handleEdit}>
-              <CheckIcon />
-            </IconButton>
-          ) : (
-            <IconButton onClick={handleEdit}>
-              <EditIcon />
-            </IconButton>
-          )}
+          <HasPermission>
+            {isEdit ? (
+              <IconButton onClick={handleEdit}>
+                <CheckIcon />
+              </IconButton>
+            ) : (
+              <IconButton onClick={handleEdit}>
+                <EditIcon />
+              </IconButton>
+            )}
+          </HasPermission>
           <Typography variant="h4" sx={{ fontWeight: 'bold', mr: 2.5 }}>
             This is the Title
           </Typography>
-          {}
           <Chip
             label="Published"
             size="small"
             sx={{
+              color: 'white',
               backgroundColor: 'success.light',
               fontFamily: 'fontTitle',
               fontWeight: 'bold',

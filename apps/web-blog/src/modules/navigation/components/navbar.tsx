@@ -72,6 +72,7 @@ export function Logo() {
           ':hover': {
             textDecoration: 'none',
           },
+          textDecoration: 'none',
         }}
       >
         MyBlog
@@ -139,7 +140,7 @@ export function DefaultLinks({
           )}
           <Button
             onClick={() => {
-              logout(null, {
+              logout({} as any, {
                 onSuccess: (res) => {
                   if (!_.has(res.data, 'errorCode')) {
                     setLogoutState();

@@ -43,13 +43,13 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthenticationGuard)
-  @Post()
+  @Post('/create')
   async createPost(@Body() body: CreatePostDto) {
     return await this.postsService.createPost(body);
   }
 
   @UseGuards(JwtAuthenticationGuard)
-  @Patch('/:postId')
+  @Patch(':postId/update')
   async updatePost(
     @Body() body: UpdatePostDto,
     @Param() { postId }: UpdatePostParam,
@@ -58,7 +58,7 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthenticationGuard)
-  @Delete('/:postId')
+  @Delete(':postId/delete')
   async deletePost(@Param() { postId }: DeletePostParam) {
     return await this.postsService.deletePost(postId);
   }

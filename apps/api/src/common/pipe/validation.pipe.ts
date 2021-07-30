@@ -9,6 +9,8 @@ import { validate, ValidationError } from 'class-validator';
 import { Errors } from '../../errors/errors';
 import * as _ from 'lodash';
 
+// TODO: fix validation pipe
+
 @Injectable()
 export class ValidationPipe implements PipeTransform {
   async transform(value: any, metaData: ArgumentMetadata) {
@@ -17,7 +19,10 @@ export class ValidationPipe implements PipeTransform {
       throw new BadRequestException(Errors.GENERAL_BAD_REQUEST_ERROR);
     }
 
-    const object = plainToClass(metatype, value);
+    const object = plainToClass(metatype, value, {
+      enableImplicitConversion: true,
+    });
+
     const errors = await validate(object);
 
     if (errors.length > 0) {

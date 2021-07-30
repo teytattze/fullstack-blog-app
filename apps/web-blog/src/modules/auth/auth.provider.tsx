@@ -67,7 +67,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const { result, data } = checkAuthentication();
       if (result && data) {
         setUser({
-          id: data.id,
+          id: data.userId,
           username: data.username,
           email: data.email,
           emailVerified: data.emailVerified,

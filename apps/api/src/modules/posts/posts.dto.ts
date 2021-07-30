@@ -1,18 +1,24 @@
-import { IsBoolean, IsOptional, IsUUID, IsString, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsOptional,
+  IsUUID,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class IndexPostsQuery {
   @IsBoolean()
   @IsOptional()
-  published: boolean;
+  published?: boolean;
 }
 
 export class CreatePostDto {
   @IsString()
-  @Min(2)
+  @MinLength(2)
   title: string;
 
   @IsString()
-  @Min(10)
+  @MinLength(10)
   content: string;
 
   @IsBoolean()
@@ -25,12 +31,12 @@ export class CreatePostDto {
 export class UpdatePostDto {
   @IsOptional()
   @IsString()
-  @Min(2)
+  @MinLength(2)
   title?: string;
 
   @IsOptional()
   @IsString()
-  @Min(10)
+  @MinLength(10)
   content?: string;
 
   @IsOptional()

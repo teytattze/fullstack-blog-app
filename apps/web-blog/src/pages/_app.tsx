@@ -9,6 +9,7 @@ import { Hydrate } from 'react-query/hydration';
 import theme from '../styles/theme.style';
 import { Layout } from '../components';
 import { AuthProvider } from 'src/modules/auth/auth.provider';
+import 'src/lib/interceptor';
 
 const cache = createCache({ key: 'css', prepend: true });
 cache.compat = true;

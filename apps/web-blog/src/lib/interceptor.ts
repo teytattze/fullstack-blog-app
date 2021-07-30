@@ -1,8 +1,8 @@
-import { apiClient } from './ajax';
+import { apiWithAuth } from './ajax';
 import { getCsrfToken } from 'src/modules/auth/auth.helpers';
 import { refreshAccess, refreshCsrf } from 'src/services/api-auth.service';
 
-apiClient.interceptors.request.use(
+apiWithAuth.interceptors.request.use(
   (config) => {
     const csrfToken = getCsrfToken();
     if (csrfToken) {
@@ -16,7 +16,7 @@ apiClient.interceptors.request.use(
   },
 );
 
-apiClient.interceptors.response.use(
+apiWithAuth.interceptors.response.use(
   (res) => {
     return res;
   },
@@ -27,11 +27,11 @@ apiClient.interceptors.response.use(
     if (errorCode === 'AUTH_002') {
       originalReq._retry = true;
       await refreshAccess();
-      return apiClient(originalReq);
+      return apiWithAuth(originalReq);
     } else if (errorCode === 'AUTH_004') {
       originalReq._retry = true;
       await refreshCsrf();
-      return apiClient(originalReq);
+      return apiWithAuth(originalReq);
     }
 
     return Promise.reject(err);
