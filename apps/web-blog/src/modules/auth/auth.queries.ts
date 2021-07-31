@@ -4,6 +4,7 @@ import { login, logout } from 'src/services/api-auth.service';
 import {
   ILoginSuccess,
   ILoginValue,
+  ILogoutSuccess,
 } from 'src/shared/interfaces/auth.interface';
 
 export const useLogin = () => {
@@ -13,5 +14,5 @@ export const useLogin = () => {
 };
 
 export const useLogout = () => {
-  return useMutation(() => logout());
+  return useMutation<ILogoutSuccess, AjaxError, null>(() => logout());
 };

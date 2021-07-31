@@ -4,8 +4,14 @@ export interface IPost {
   title: string;
   content: string;
   published: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IPostWithAuthor extends IPost {
+  author: {
+    username: string;
+  };
 }
 
 export interface ICreatePostValue {

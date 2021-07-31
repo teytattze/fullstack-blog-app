@@ -19,6 +19,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { UrlObject } from 'url';
 import { useAuth } from 'src/hooks/use-auth';
+import { useSnackbar } from 'src/hooks/use-snackbar';
 import { useLogout } from 'src/modules/auth/auth.queries';
 import * as _ from 'lodash';
 
@@ -90,9 +91,11 @@ export function DefaultLinks({
   isDefault,
   isAuthenticated,
 }: DefaultLinksProps) {
+  const { logoutSuccess } = useAuth();
   const { mutate: logout } = useLogout();
-  const { setLogoutState } = useAuth();
   const router = useRouter();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const checkPath = (pathname: string) => {
     if (router.pathname === '/' && pathname === '/') return true;
@@ -140,14 +143,15 @@ export function DefaultLinks({
           )}
           <Button
             onClick={() => {
-              logout({} as any, {
+              logout(null, {
                 onSuccess: (res) => {
-                  if (!_.has(res.data, 'errorCode')) {
-                    setLogoutState();
-                  }
+                  logoutSuccess();
+                  enqueueSnackbar(res.message, 'success');
+                },
+                onError: () => {
+                  enqueueSnackbar('Logout failed', 'error');
                 },
               });
-              setLogoutState();
             }}
             variant="outlined"
             size={isDefault ? 'medium' : 'small'}

@@ -15,6 +15,7 @@ import {
 import {
   ICreatePostValue,
   IPost,
+  IPostWithAuthor,
   IUpdatePostValue,
 } from 'src/shared/interfaces/posts.interface';
 
@@ -25,9 +26,9 @@ const PostQueryKey = {
 
 export const useIndexPosts = (
   { isPublished }: { isPublished: boolean },
-  options?: UseQueryOptions<IPost[], AjaxError, IPost[]>,
+  options?: UseQueryOptions<IPostWithAuthor[], AjaxError, IPostWithAuthor[]>,
 ) => {
-  return useQuery<IPost[], AjaxError, IPost[]>(
+  return useQuery<IPostWithAuthor[], AjaxError, IPostWithAuthor[]>(
     PostQueryKey.INDEX_POSTS,
     () => indexPosts(isPublished),
     {
@@ -38,9 +39,9 @@ export const useIndexPosts = (
 
 export const useGetPost = (
   postId: string,
-  options?: UseQueryOptions<IPost, AjaxError>,
+  options?: UseQueryOptions<IPostWithAuthor, AjaxError>,
 ) => {
-  return useQuery<IPost, AjaxError, IPost>(
+  return useQuery<IPostWithAuthor, AjaxError, IPostWithAuthor>(
     [PostQueryKey.GET_POST, postId],
     () => getPost(postId),
     {

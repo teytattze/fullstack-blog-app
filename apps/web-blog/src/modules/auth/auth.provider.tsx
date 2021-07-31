@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Snackbar } from 'src/components';
 import { ICookiesUser } from 'src/shared/interfaces/users.interface';
 import { checkAuthentication } from './auth.helpers';
 
@@ -18,8 +17,8 @@ type AuthContextState = {
   setUser: (user: ICookiesUser) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
-  setLoginState: () => void;
-  setLogoutState: () => void;
+  loginSuccess: () => void;
+  logoutSuccess: () => void;
 };
 
 export const AuthContext = React.createContext<AuthContextState>({
@@ -29,8 +28,8 @@ export const AuthContext = React.createContext<AuthContextState>({
   setUser: () => null,
   isLoading: true,
   setIsLoading: () => null,
-  setLoginState: () => null,
-  setLogoutState: () => null,
+  loginSuccess: () => null,
+  logoutSuccess: () => null,
 });
 
 type AuthProviderProps = {
@@ -41,25 +40,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
   const [user, setUser] = React.useState<ICookiesUser>(initialUser);
-
-  const [snackbar, setSnackbar] = React.useState({
-    login: false,
-    logout: false,
-  });
-
-  const handleLoginSnackbar = () => {
-    setSnackbar({
-      ...snackbar,
-      login: !snackbar.login,
-    });
-  };
-
-  const handleLogoutSnackbar = () => {
-    setSnackbar({
-      ...snackbar,
-      logout: !snackbar.logout,
-    });
-  };
 
   React.useEffect(() => {
     const initialState = () => {
@@ -83,15 +63,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     initialState();
   }, [isAuthenticated]);
 
-  const setLoginState = () => {
+  const loginSuccess = () => {
     setIsAuthenticated(true);
-    handleLoginSnackbar();
   };
 
-  const setLogoutState = () => {
+  const logoutSuccess = () => {
     setUser(initialUser);
     setIsAuthenticated(false);
-    handleLogoutSnackbar();
   };
 
   return (
@@ -103,23 +81,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser,
         isLoading,
         setIsLoading,
-        setLoginState,
-        setLogoutState,
+        loginSuccess,
+        logoutSuccess,
       }}
     >
       {children}
-      <Snackbar
-        open={snackbar.login}
-        handleClose={handleLoginSnackbar}
-        type="success"
-        message="Login successfully!"
-      />
-      <Snackbar
-        open={snackbar.logout}
-        handleClose={handleLogoutSnackbar}
-        type="success"
-        message="Logout successfully!"
-      />
     </AuthContext.Provider>
   );
 }

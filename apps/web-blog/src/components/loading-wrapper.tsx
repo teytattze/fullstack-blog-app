@@ -29,7 +29,7 @@ export function LoadingWrapper({
   const styleProps: StyleProps = { loading };
   const classes = useStyles(styleProps);
 
-  if (type === 'skeleton' && renderSkeleton) {
+  if (type === 'skeleton' && renderSkeleton && loading) {
     return renderSkeleton();
   }
 

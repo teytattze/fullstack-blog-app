@@ -4,14 +4,22 @@ import {
   Chip,
   Divider,
   IconButton,
+  Skeleton,
   Stack,
   Typography,
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import EditIcon from '@material-ui/icons/Edit';
+import moment from 'moment';
+import { useRouter } from 'next/router';
 import { HasPermission } from 'src/modules/auth';
+import { useGetPost } from '../posts.queries';
+import { LoadingWrapper } from 'src/components';
 
 export function PostDetails() {
+  const router = useRouter();
+  const { data, isLoading } = useGetPost(router.query.postId as string);
+
   const [isEdit, setIsEdit] = React.useState(false);
 
   const handleEdit = () => {
@@ -19,7 +27,17 @@ export function PostDetails() {
   };
 
   return (
-    <>
+    <LoadingWrapper
+      loading={isLoading}
+      type="skeleton"
+      renderSkeleton={() => (
+        <Stack direction="column" spacing={2}>
+          <Skeleton variant="rectangular" height={24} />
+          <Skeleton variant="rectangular" height={24} />
+          <Skeleton variant="rectangular" height={188} />
+        </Stack>
+      )}
+    >
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -41,15 +59,14 @@ export function PostDetails() {
             )}
           </HasPermission>
           <Typography variant="h4" sx={{ fontWeight: 'bold', mr: 2.5 }}>
-            This is the Title
+            {data?.title}
           </Typography>
           <Chip
-            label="Published"
+            label={data?.published ? 'Published' : 'Archived'}
+            color={data?.published ? 'success' : 'info'}
             size="small"
             sx={{
               color: 'white',
-              backgroundColor: 'success.light',
-              fontFamily: 'fontTitle',
               fontWeight: 'bold',
               textTransform: 'uppercase',
             }}
@@ -64,7 +81,7 @@ export function PostDetails() {
               textTransform: 'uppercase',
             }}
           >
-            28 June 2021
+            {moment(data?.updatedAt).format('DD MMMM YYYY')}
           </Typography>
           <Typography
             variant="caption"
@@ -74,7 +91,7 @@ export function PostDetails() {
               textTransform: 'uppercase',
             }}
           >
-            By: Tey Tat Tze
+            By: {data?.author.username}
           </Typography>
         </Stack>
       </Stack>
@@ -83,37 +100,23 @@ export function PostDetails() {
         variant="body1"
         sx={{ px: { md: 3 }, lineHeight: 1.75, textAlign: 'justify' }}
       >
-        Phasellus consequat, tortor vitae tempor gravida, lacus augue dignissim
-        ante, ut faucibus leo ligula eget purus. Fusce sed turpis a quam
-        lobortis scelerisque. Pellentesque consectetur arcu non velit bibendum
-        iaculis. Sed egestas scelerisque ante a interdum. Curabitur ac lectus at
-        nibh dignissim vestibulum. Vivamus a erat tristique, facilisis metus eu,
-        consectetur dui. Praesent bibendum, nisl ac consectetur condimentum,
-        justo leo pharetra sem, sit amet pulvinar enim ex nec elit. Etiam
-        volutpat fermentum vulputate. Phasellus pulvinar massa sit amet dui
-        condimentum congue. Mauris sodales tempor lorem, et gravida sapien
-        vehicula a. Pellentesque eget eros vitae lorem elementum rhoncus ut ut
-        libero. Duis tempor erat a faucibus sollicitudin. Duis nec gravida
-        risus. Aliquam porttitor tristique quam interdum luctus. Suspendisse ut
-        vulputate ligula. Sed rutrum venenatis urna ut consectetur. Nam arcu
-        sapien, rhoncus eu eleifend vitae, tincidunt a orci. Pellentesque vitae
-        fringilla turpis. Mauris aliquet pellentesque felis, ut ullamcorper
-        magna tempus at. Donec lectus urna, semper quis ante eu, interdum
-        tincidunt leo. Nulla sagittis eu magna ac viverra.
+        {data?.content}
       </Typography>
-      {isEdit && (
-        <Stack
-          direction="row"
-          justifyContent="center"
-          spacing={2}
-          sx={{ mt: 10 }}
-        >
-          <Button color="error">Delete</Button>
-          <Button variant="contained" disableElevation>
-            Archive
-          </Button>
-        </Stack>
-      )}
-    </>
+      <HasPermission>
+        {isEdit && (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            spacing={2}
+            sx={{ mt: 10 }}
+          >
+            <Button color="error">Delete</Button>
+            <Button variant="contained" disableElevation>
+              Archive
+            </Button>
+          </Stack>
+        )}
+      </HasPermission>
+    </LoadingWrapper>
   );
 }

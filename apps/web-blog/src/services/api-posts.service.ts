@@ -2,16 +2,25 @@ import { ajax, apiClientWithoutAuth } from 'src/lib/ajax';
 import {
   ICreatePostValue,
   IPost,
+  IPostWithAuthor,
   IUpdatePostValue,
 } from 'src/shared/interfaces/posts.interface';
 
 const baseUrl = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/posts`;
 
-export const indexPosts = async (isPublished: boolean): Promise<IPost[]> =>
-  await apiClientWithoutAuth.get(`${baseUrl}?published=${isPublished}`);
+export const indexPosts = async (
+  isPublished: boolean,
+): Promise<IPostWithAuthor[]> => {
+  const res = await apiClientWithoutAuth.get(
+    `${baseUrl}?published=${isPublished}`,
+  );
+  return res.data;
+};
 
-export const getPost = async (postId: string): Promise<IPost> =>
-  await apiClientWithoutAuth.get(`${baseUrl}/${postId}`);
+export const getPost = async (postId: string): Promise<IPostWithAuthor> => {
+  const res = await apiClientWithoutAuth.get(`${baseUrl}/${postId}`);
+  return res.data;
+};
 
 export const createPost = async (data: ICreatePostValue) =>
   await ajax.post<IPost>(`${baseUrl}/create`, data);

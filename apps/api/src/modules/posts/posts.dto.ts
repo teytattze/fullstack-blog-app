@@ -1,13 +1,8 @@
-import {
-  IsBoolean,
-  IsOptional,
-  IsUUID,
-  IsString,
-  MinLength,
-} from 'class-validator';
+import { IsOptional, IsUUID, IsString, MinLength } from 'class-validator';
+import { ToBoolean } from 'src/lib/to-boolean.util';
 
 export class IndexPostsQuery {
-  @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   published?: boolean;
 }
@@ -21,7 +16,7 @@ export class CreatePostDto {
   @MinLength(10)
   content: string;
 
-  @IsBoolean()
+  @ToBoolean()
   published: boolean;
 
   @IsUUID('4')
@@ -40,7 +35,7 @@ export class UpdatePostDto {
   content?: string;
 
   @IsOptional()
-  @IsBoolean()
+  @ToBoolean()
   published?: boolean;
 }
 
@@ -55,7 +50,7 @@ export class DeletePostParam {
 }
 
 export class SinglePostParam {
-  @IsUUID('4')
+  @IsString()
   postId: string;
 }
 

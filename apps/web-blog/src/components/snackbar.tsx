@@ -16,20 +16,20 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 export interface SnackbarProps extends Omit<MuiSnackbarProps, 'open'> {
   open: boolean;
   handleClose: () => void;
-  type: AlertProps['severity'];
+  severity: AlertProps['severity'];
   message: string;
 }
 
 export function Snackbar({
   open,
   handleClose,
-  type,
+  severity,
   message,
   ...props
 }: SnackbarProps) {
   return (
     <MuiSnackbar open={open} onClose={handleClose} {...props}>
-      <Alert onClose={handleClose} severity={type}>
+      <Alert onClose={handleClose} severity={severity}>
         {message}
       </Alert>
     </MuiSnackbar>

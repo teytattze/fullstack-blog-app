@@ -6,3 +6,7 @@ export interface ILoginValue {
 export interface ILoginSuccess {
   message: string;
 }
+
+export interface ILogoutSuccess {
+  message: string;
+}

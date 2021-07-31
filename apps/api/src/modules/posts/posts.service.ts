@@ -8,20 +8,20 @@ import { PostErrors } from './posts.error';
 export class PostsService {
   constructor(private readonly postsRepository: PostsRepository) {}
 
-  async getAllPosts(published = true) {
-    const res = this.postsRepository.findAllPosts(published);
+  async getAllPosts(published) {
+    const res = await this.postsRepository.findAllPosts(published);
     if (!res) throw new NotFoundException(PostErrors.POST_NOT_FOUND_ERROR);
     return res;
   }
 
   async findUserPosts(userId: string) {
-    const res = this.postsRepository.findUserPosts(userId);
+    const res = await this.postsRepository.findUserPosts(userId);
     if (!res) throw new NotFoundException(PostErrors.POST_NOT_FOUND_ERROR);
     return res;
   }
 
   async findSinglePost(postId: string) {
-    const res = this.postsRepository.findSinglePost(postId);
+    const res = await this.postsRepository.findSinglePost(postId);
     if (!res) throw new NotFoundException(PostErrors.POST_NOT_FOUND_ERROR);
     return res;
   }

@@ -14,7 +14,6 @@ import {
   CreatePostDto,
   DeletePostParam,
   IndexPostsQuery,
-  IndexUserPublisedPostParam,
   SinglePostParam,
   UpdatePostDto,
   UpdatePostParam,
@@ -28,13 +27,6 @@ export class PostsController {
   @Get()
   async getAllPosts(@Query() { published }: IndexPostsQuery) {
     return await this.postsService.getAllPosts(published);
-  }
-
-  @Get('/:userId')
-  async getAllUserPublishedPosts(
-    @Param() { userId }: IndexUserPublisedPostParam,
-  ) {
-    return await this.postsService.findUserPosts(userId);
   }
 
   @Get('/:postId')

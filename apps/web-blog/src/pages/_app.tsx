@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import theme from '../styles/theme.style';
 import { Layout } from '../components';
+import { SnackbarProvider } from 'src/contexts/snackbar.context';
 import { AuthProvider } from 'src/modules/auth/auth.provider';
 import 'src/lib/interceptor';
 
@@ -33,11 +34,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <CacheProvider value={cache}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <AuthProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </AuthProvider>
+            <SnackbarProvider>
+              <AuthProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </AuthProvider>
+            </SnackbarProvider>
           </ThemeProvider>
         </CacheProvider>
       </Hydrate>

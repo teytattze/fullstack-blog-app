@@ -16,6 +16,7 @@ import Image from 'next/image';
 import NextLink from 'next/link';
 import { useForm, Controller } from 'react-hook-form';
 import { LoadingWrapper, PageTitle } from 'src/components';
+import { useSnackbar } from 'src/hooks/use-snackbar';
 import { IUserRegistrationValue } from 'src/shared/interfaces/users.interface';
 import {
   defaultUserRegistrationValue,
@@ -33,6 +34,8 @@ export function SignUpForm() {
   const { mutate: userRegister, isLoading: registrationLoading } =
     useUserRegister();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const [errMessage, setErrMessage] = React.useState<string>('');
 
   return (
@@ -42,9 +45,9 @@ export function SignUpForm() {
         <form
           onSubmit={handleSubmit((data: IUserRegistrationValue) =>
             userRegister(data, {
-              onSuccess: () => {
+              onSuccess: (res) => {
+                enqueueSnackbar('Register successfully', 'success');
                 reset(defaultUserRegistrationValue);
-                return;
               },
               onError: (err) => {
                 setErrMessage(err.response?.data.message);

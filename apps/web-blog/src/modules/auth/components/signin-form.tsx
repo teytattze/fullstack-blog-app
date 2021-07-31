@@ -19,10 +19,12 @@ import { useForm, Controller } from 'react-hook-form';
 import { LoadingWrapper, PageTitle } from 'src/components';
 import { ILoginValue } from 'src/shared/interfaces/auth.interface';
 import { useAuth } from 'src/hooks/use-auth';
+import { useSnackbar } from 'src/hooks/use-snackbar';
 import { defaultLoginValue, loginValidation } from '../auth.form';
 import { useLogin } from '../auth.queries';
 
 export function SignInForm() {
+  const { logoutSuccess } = useAuth();
   const {
     handleSubmit,
     control,
@@ -30,7 +32,8 @@ export function SignInForm() {
     reset,
   } = useForm<ILoginValue>();
   const { mutate: login, isLoading: loginLoading } = useLogin();
-  const { setLoginState } = useAuth();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [errMessage, setErrMessage] = React.useState<string>('');
 
@@ -48,10 +51,10 @@ export function SignInForm() {
         <form
           onSubmit={handleSubmit((data: ILoginValue) =>
             login(data, {
-              onSuccess: () => {
-                setLoginState();
+              onSuccess: (res) => {
+                logoutSuccess();
+                enqueueSnackbar(res.message, 'success');
                 reset(defaultLoginValue);
-                return;
               },
               onError: (err) => {
                 setErrMessage(err.response?.data.message);
