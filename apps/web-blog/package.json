@@ -46,8 +46,8 @@
     "typescript": "4.3.5"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "<rootDir>/src/**/*.test.(ts|tsx)"
+    "roots": [
+      "<rootDir>"
     ],
     "testMatch": [
       "<rootDir>/src/**/*.test.(ts|tsx)"
