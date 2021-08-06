@@ -25,8 +25,8 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  async getAllPosts(@Query() { published }: IndexPostsQuery) {
-    return await this.postsService.getAllPosts(published);
+  async getAllPosts(@Query() { published, userId }: IndexPostsQuery) {
+    return await this.postsService.getAllPosts({ published, userId });
   }
 
   @Get('/:postId')

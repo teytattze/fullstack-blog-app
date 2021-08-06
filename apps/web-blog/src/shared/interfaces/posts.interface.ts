@@ -14,6 +14,11 @@ export interface IPostWithAuthor extends IPost {
   };
 }
 
+export interface IIndexPostFilter {
+  userId?: string;
+  published?: boolean;
+}
+
 export interface ICreatePostValue {
   title: string;
   content: string;

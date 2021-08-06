@@ -4,7 +4,7 @@ import { LoadingWrapper } from 'src/components';
 import { useIndexPosts } from '../posts.queries';
 
 export function PostListing() {
-  const { data, isLoading } = useIndexPosts({ isPublished: true });
+  const { data, isLoading } = useIndexPosts({ published: true });
 
   return (
     <LoadingWrapper

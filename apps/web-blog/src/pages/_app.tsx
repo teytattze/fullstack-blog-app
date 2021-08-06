@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import theme from '../styles/theme.style';
 import { Layout } from '../components';
-import { SnackbarProvider } from 'src/contexts/snackbar.context';
+import { SnackbarProvider } from 'src/shared/contexts/snackbar.context';
 import { AuthProvider } from 'src/modules/auth/auth.provider';
 import 'src/lib/interceptor';
 
@@ -23,7 +23,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           queries: {
             staleTime: 15000,
           },
-          mutations: {},
         },
       }),
   );

@@ -14,6 +14,7 @@ import {
 } from 'src/services/api-posts.service';
 import {
   ICreatePostValue,
+  IIndexPostFilter,
   IPost,
   IPostWithAuthor,
   IUpdatePostValue,
@@ -25,12 +26,12 @@ const PostQueryKey = {
 };
 
 export const useIndexPosts = (
-  { isPublished }: { isPublished: boolean },
+  filter?: IIndexPostFilter,
   options?: UseQueryOptions<IPostWithAuthor[], AjaxError, IPostWithAuthor[]>,
 ) => {
   return useQuery<IPostWithAuthor[], AjaxError, IPostWithAuthor[]>(
     PostQueryKey.INDEX_POSTS,
-    () => indexPosts(isPublished),
+    () => indexPosts({ ...filter }),
     {
       ...options,
     },

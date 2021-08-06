@@ -18,8 +18,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { UrlObject } from 'url';
-import { useAuth } from 'src/hooks/use-auth';
-import { useSnackbar } from 'src/hooks/use-snackbar';
+import { useAuth } from 'src/shared/hooks/use-auth';
+import { useSnackbar } from 'src/shared/hooks/use-snackbar';
 import { useLogout } from 'src/modules/auth/auth.queries';
 import * as _ from 'lodash';
 
@@ -91,7 +91,7 @@ export function DefaultLinks({
   isDefault,
   isAuthenticated,
 }: DefaultLinksProps) {
-  const { logoutSuccess } = useAuth();
+  const { logoutSuccess, user } = useAuth();
   const { mutate: logout } = useLogout();
   const router = useRouter();
 
@@ -124,7 +124,7 @@ export function DefaultLinks({
                 <DefaultNavLink
                   variant="text"
                   color="inherit"
-                  href="/posts"
+                  href={`/${user.id}/posts`}
                   isActive={checkPath('/posts')}
                 >
                   My Post
@@ -132,10 +132,10 @@ export function DefaultLinks({
                 <DefaultNavLink
                   variant="text"
                   color="inherit"
-                  href="/account"
-                  isActive={checkPath('/account')}
+                  href="/create-post"
+                  isActive={checkPath('/create-post')}
                 >
-                  Account
+                  New Post
                 </DefaultNavLink>
               </Stack>
               <Divider orientation="vertical" flexItem />

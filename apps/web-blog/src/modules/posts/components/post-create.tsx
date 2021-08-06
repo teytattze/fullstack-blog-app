@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { useForm, Controller } from 'react-hook-form';
 import { LoadingWrapper } from 'src/components';
-import { useAuth } from 'src/hooks/use-auth';
+import { useAuth } from 'src/shared/hooks/use-auth';
 import { ICreatePostValue } from 'src/shared/interfaces/posts.interface';
 import { createPostValidation, defaultCreatePostValue } from '../posts.form';
 import { useCreatePost } from '../posts.queries';

@@ -15,16 +15,17 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import * as React from 'react';
 import Image from 'next/image';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm, Controller } from 'react-hook-form';
 import { LoadingWrapper, PageTitle } from 'src/components';
 import { ILoginValue } from 'src/shared/interfaces/auth.interface';
-import { useAuth } from 'src/hooks/use-auth';
-import { useSnackbar } from 'src/hooks/use-snackbar';
+import { useAuth } from 'src/shared/hooks/use-auth';
+import { useSnackbar } from 'src/shared/hooks/use-snackbar';
 import { defaultLoginValue, loginValidation } from '../auth.form';
 import { useLogin } from '../auth.queries';
 
 export function SignInForm() {
-  const { logoutSuccess } = useAuth();
+  const { loginSuccess } = useAuth();
   const {
     handleSubmit,
     control,
@@ -33,6 +34,7 @@ export function SignInForm() {
   } = useForm<ILoginValue>();
   const { mutate: login, isLoading: loginLoading } = useLogin();
 
+  const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const [errMessage, setErrMessage] = React.useState<string>('');
@@ -52,9 +54,10 @@ export function SignInForm() {
           onSubmit={handleSubmit((data: ILoginValue) =>
             login(data, {
               onSuccess: (res) => {
-                logoutSuccess();
+                loginSuccess();
                 enqueueSnackbar(res.message, 'success');
                 reset(defaultLoginValue);
+                push('/');
               },
               onError: (err) => {
                 setErrMessage(err.response?.data.message);
@@ -81,6 +84,8 @@ export function SignInForm() {
                     variant="outlined"
                     helperText={errors.username?.message}
                     error={Boolean(errors.username)}
+                    data-testid="username-input-field"
+                    aria-labelledby="Username"
                   />
                 )}
               />
@@ -97,6 +102,8 @@ export function SignInForm() {
                     variant="outlined"
                     helperText={errors.password?.message}
                     error={Boolean(errors.password)}
+                    data-testid="password-input-field"
+                    aria-labelledby="Password"
                   />
                 )}
               />
@@ -114,6 +121,7 @@ export function SignInForm() {
                     },
                     textDecoration: 'none',
                   }}
+                  data-testid="forgot-password-button"
                 >
                   Forgot Password?
                 </Link>
@@ -126,6 +134,7 @@ export function SignInForm() {
             loading={loginLoading}
             fullWidth
             disableElevation
+            data-testid="signin-submit-button"
           >
             Sign In
           </LoadingButton>
@@ -145,6 +154,7 @@ export function SignInForm() {
           color="primary"
           fullWidth
           sx={{ color: 'text.secondary' }}
+          data-testid="google-signin-button"
         >
           <Stack direction="row" alignItems="center" spacing={2}>
             <Image
@@ -172,6 +182,7 @@ export function SignInForm() {
             endIcon={<ArrowForwardIcon />}
             fullWidth
             disableElevation
+            data-testid="signup-button"
           >
             Sign Up Now
           </Button>

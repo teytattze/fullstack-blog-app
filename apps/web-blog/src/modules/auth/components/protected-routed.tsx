@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useAuth } from 'src/hooks/use-auth';
+import { useAuth } from 'src/shared/hooks/use-auth';
 
 export type ProtectedRoutedProps = {
   children: React.ReactNode;

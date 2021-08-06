@@ -9,6 +9,8 @@
   "scripts": {
     "dev:api": "yarn workspace api start:dev",
     "dev:web-blog": "yarn workspace web-blog dev",
+    "test:api": "yarn workspace api test:watch",
+    "test:web-blog": "yarn workspace web-blog test",
     "format:api": "yarn workspace api format",
     "format:web-blog": "yarn workspace web-blog format",
     "docker:up": "docker-compose -f docker-compose.yml up -d",

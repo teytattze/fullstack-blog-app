@@ -3,13 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { PostsRepository } from '../../repositories/posts.repository';
 import { CreatePostDto, UpdatePostDto } from './posts.dto';
 import { PostErrors } from './posts.error';
+import { IIndexPostFilter } from './posts.interface';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly postsRepository: PostsRepository) {}
 
-  async getAllPosts(published) {
-    const res = await this.postsRepository.findAllPosts(published);
+  async getAllPosts(filter: IIndexPostFilter) {
+    const res = await this.postsRepository.findAllPosts({ ...filter });
     if (!res) throw new NotFoundException(PostErrors.POST_NOT_FOUND_ERROR);
     return res;
   }

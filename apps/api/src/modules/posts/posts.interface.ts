@@ -5,3 +5,8 @@ export interface IPost extends Post {
     username: string;
   };
 }
+
+export interface IIndexPostFilter {
+  userId: string;
+  published: boolean;
+}

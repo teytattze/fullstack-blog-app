@@ -5,6 +5,10 @@ export class IndexPostsQuery {
   @ToBoolean()
   @IsOptional()
   published?: boolean;
+
+  @IsUUID()
+  @IsOptional()
+  userId?: string;
 }
 
 export class CreatePostDto {

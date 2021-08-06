@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Prisma, Post } from '@prisma/client';
-import { IPost } from 'src/modules/posts/posts.interface';
+import { IIndexPostFilter, IPost } from 'src/modules/posts/posts.interface';
 import { DatabasesService } from '../common/databases/databases.service';
 
 @Injectable()
@@ -8,10 +8,13 @@ export class PostsRepository {
   private readonly logger = new Logger(PostsRepository.name);
   constructor(private readonly prisma: DatabasesService) {}
 
-  async findAllPosts(published: boolean): Promise<IPost[]> {
+  async findAllPosts(filter: IIndexPostFilter): Promise<IPost[]> {
     try {
       return await this.prisma.post.findMany({
-        where: { published },
+        where: {
+          published: filter.published,
+          authorId: filter.userId,
+        },
         include: {
           author: {
             select: {

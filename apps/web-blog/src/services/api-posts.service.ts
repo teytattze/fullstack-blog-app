@@ -1,6 +1,8 @@
 import { ajax, apiClientWithoutAuth } from 'src/lib/ajax';
+import { transformFilter } from 'src/lib/utils';
 import {
   ICreatePostValue,
+  IIndexPostFilter,
   IPost,
   IPostWithAuthor,
   IUpdatePostValue,
@@ -9,11 +11,10 @@ import {
 const baseUrl = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/posts`;
 
 export const indexPosts = async (
-  isPublished: boolean,
+  filter: IIndexPostFilter,
 ): Promise<IPostWithAuthor[]> => {
-  const res = await apiClientWithoutAuth.get(
-    `${baseUrl}?published=${isPublished}`,
-  );
+  const queryParams = transformFilter(filter);
+  const res = await apiClientWithoutAuth.get(`${baseUrl}?${queryParams}`);
   return res.data;
 };
 

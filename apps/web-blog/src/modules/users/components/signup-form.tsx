@@ -16,7 +16,7 @@ import Image from 'next/image';
 import NextLink from 'next/link';
 import { useForm, Controller } from 'react-hook-form';
 import { LoadingWrapper, PageTitle } from 'src/components';
-import { useSnackbar } from 'src/hooks/use-snackbar';
+import { useSnackbar } from 'src/shared/hooks/use-snackbar';
 import { IUserRegistrationValue } from 'src/shared/interfaces/users.interface';
 import {
   defaultUserRegistrationValue,
