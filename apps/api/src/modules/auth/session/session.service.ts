@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Prisma, Session } from '@prisma/client';
 import { randomBytes } from 'crypto';
-import { SessionsRepository } from '../../repositories/sessions.repository';
+import { SessionsRepository } from '../../../repositories/sessions.repository';
 import {
   CSRF_BYTES,
   CSRF_TOKEN_TTL,

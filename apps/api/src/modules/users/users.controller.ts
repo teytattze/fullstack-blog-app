@@ -6,6 +6,7 @@ import {
   IndexUsersSuccess,
   UserRegistrationDto,
   UserRegistrationSuccess,
+  VerifyUserEmailParam,
 } from './users.dto';
 import { UsersService } from './users.service';
 
@@ -18,6 +19,13 @@ export class UsersController {
     return await this.usersService.getAllUser();
   }
 
+  @Post('/register')
+  async registration(
+    @Body() body: UserRegistrationDto,
+  ): Promise<UserRegistrationSuccess> {
+    return await this.usersService.registration(body);
+  }
+
   @UseGuards(JwtAuthenticationGuard)
   @Get('/:id')
   async findUserAllPosts(
@@ -26,10 +34,8 @@ export class UsersController {
     return await this.usersService.getUserDetails(id);
   }
 
-  @Post('/register')
-  async registration(
-    @Body() body: UserRegistrationDto,
-  ): Promise<UserRegistrationSuccess> {
-    return await this.usersService.registration(body);
+  @Post('/verify/:id')
+  async verifyUserEmail(@Param() { id }: VerifyUserEmailParam) {
+    return await this.usersService.verifyUserEmail(id);
   }
 }

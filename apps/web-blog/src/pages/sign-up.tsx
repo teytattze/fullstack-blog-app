@@ -1,7 +1,7 @@
-import { SignUpForm } from '../modules/users';
+import { UserSignUpForm } from '../modules/users';
 
 function SignUp() {
-  return <SignUpForm />;
+  return <UserSignUpForm />;
 }
 
 export default SignUp;

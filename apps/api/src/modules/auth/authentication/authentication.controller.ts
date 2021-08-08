@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { JwtAuthenticationGuard } from '../../common/guards/jwt-authentication.guard';
+import { JwtAuthenticationGuard } from '../../../common/guards/jwt-authentication.guard';
 import { UserLoginDto } from './authentication.dto';
 import { AuthenticationService } from './authentication.service';
 import { CSRF_TOKEN_TTL, REFRESH_TOKEN_TTL } from '../session/session.const';

@@ -5,14 +5,12 @@ import {
   Paper,
   Stack,
   TextField,
-  Typography,
   ClickAwayListener,
   Alert,
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import * as React from 'react';
-import Image from 'next/image';
 import NextLink from 'next/link';
 import { useForm, Controller } from 'react-hook-form';
 import { LoadingWrapper, PageTitle } from 'src/components';
@@ -24,15 +22,14 @@ import {
 } from '../users.form';
 import { useUserRegister } from '../users.queries';
 
-export function SignUpForm() {
+export function UserSignUpForm() {
   const {
     handleSubmit,
     control,
     formState: { errors },
     reset,
   } = useForm<IUserRegistrationValue>();
-  const { mutate: userRegister, isLoading: registrationLoading } =
-    useUserRegister();
+  const { mutate: userRegister, isLoading } = useUserRegister();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -41,12 +38,15 @@ export function SignUpForm() {
   return (
     <Paper sx={{ p: 5, mx: 'auto', width: '100%', maxWidth: '500px' }}>
       <PageTitle title="Sign Up" />
-      <LoadingWrapper loading={registrationLoading}>
+      <LoadingWrapper loading={isLoading}>
         <form
           onSubmit={handleSubmit((data: IUserRegistrationValue) =>
             userRegister(data, {
-              onSuccess: (res) => {
-                enqueueSnackbar('Register successfully', 'success');
+              onSuccess: () => {
+                enqueueSnackbar(
+                  'A verification link has been sent to your email',
+                  'success',
+                );
                 reset(defaultUserRegistrationValue);
               },
               onError: (err) => {
@@ -113,39 +113,13 @@ export function SignUpForm() {
           <LoadingButton
             type="submit"
             variant="contained"
-            loading={registrationLoading}
+            loading={isLoading}
             fullWidth
             disableElevation
           >
             Sign Up
           </LoadingButton>
         </form>
-        <Divider
-          sx={{
-            my: 2.5,
-            color: 'text.disabled',
-            fontWeight: 500,
-            fontSize: 'caption.fontSize',
-          }}
-        >
-          OR
-        </Divider>
-        <Button
-          variant="outlined"
-          color="primary"
-          fullWidth
-          sx={{ color: 'text.secondary' }}
-        >
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Image
-              src="/images/google.svg"
-              alt="Google icon"
-              width={24}
-              height={24}
-            />
-            <Typography variant="body2">Sign In with Google</Typography>
-          </Stack>
-        </Button>
         <Divider
           sx={{
             my: 2.5,

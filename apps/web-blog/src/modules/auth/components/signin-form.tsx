@@ -7,13 +7,11 @@ import {
   Paper,
   Stack,
   TextField,
-  Typography,
   ClickAwayListener,
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import * as React from 'react';
-import Image from 'next/image';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm, Controller } from 'react-hook-form';
@@ -80,12 +78,11 @@ export function SignInForm() {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    id="username"
                     label="Username"
                     variant="outlined"
                     helperText={errors.username?.message}
                     error={Boolean(errors.username)}
-                    data-testid="username-input-field"
-                    aria-labelledby="Username"
                   />
                 )}
               />
@@ -97,13 +94,12 @@ export function SignInForm() {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    id="password"
                     type="password"
                     label="Password"
                     variant="outlined"
                     helperText={errors.password?.message}
                     error={Boolean(errors.password)}
-                    data-testid="password-input-field"
-                    aria-labelledby="Password"
                   />
                 )}
               />
@@ -121,7 +117,6 @@ export function SignInForm() {
                     },
                     textDecoration: 'none',
                   }}
-                  data-testid="forgot-password-button"
                 >
                   Forgot Password?
                 </Link>
@@ -134,38 +129,10 @@ export function SignInForm() {
             loading={loginLoading}
             fullWidth
             disableElevation
-            data-testid="signin-submit-button"
           >
             Sign In
           </LoadingButton>
         </form>
-        <Divider
-          sx={{
-            my: 2.5,
-            color: 'text.disabled',
-            fontWeight: 500,
-            fontSize: 'caption.fontSize',
-          }}
-        >
-          OR
-        </Divider>
-        <LoadingButton
-          variant="outlined"
-          color="primary"
-          fullWidth
-          sx={{ color: 'text.secondary' }}
-          data-testid="google-signin-button"
-        >
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Image
-              src="/images/google.svg"
-              alt="Google logo"
-              width={24}
-              height={24}
-            />
-            <Typography variant="body2">Sign In with Google</Typography>
-          </Stack>
-        </LoadingButton>
         <Divider
           sx={{
             my: 2.5,
@@ -182,7 +149,6 @@ export function SignInForm() {
             endIcon={<ArrowForwardIcon />}
             fullWidth
             disableElevation
-            data-testid="signup-button"
           >
             Sign Up Now
           </Button>

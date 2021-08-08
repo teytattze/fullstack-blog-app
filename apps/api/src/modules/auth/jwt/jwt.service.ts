@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { sign, verify, decode } from 'jsonwebtoken';
-import { ConfigService } from '../../common/config/config.service';
-import { UsersRepository } from '../../repositories/users.repository';
+import { ConfigService } from '../../../common/config/config.service';
+import { UsersRepository } from '../../../repositories/users.repository';
 import { IJwtPayload } from './jwt.interface';
 import { AUDIENCE, ISSUER } from './jwt.const';
 import { getCurrentUnixTime, checkExpiration } from '../auth.helper';

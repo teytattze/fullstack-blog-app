@@ -2,9 +2,9 @@ import { UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { JwtService } from './jwt.service';
 import { IJwtPayload } from './jwt.interface';
-import { RepositoryModule } from '../../repositories/repository.module';
-import { ConfigModule } from '../../common/config/config.module';
-import { Errors } from '../../errors/errors';
+import { RepositoryModule } from '../../../repositories/repository.module';
+import { ConfigModule } from '../../../common/config/config.module';
+import { Errors } from '../../../errors/errors';
 
 describe('Jwt Services', () => {
   let jwtService: JwtService;

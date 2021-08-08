@@ -6,6 +6,7 @@ import {
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import { UsersRepository } from '../../repositories/users.repository';
+import { MailService } from '../mail/mail.service';
 import {
   GetUserDetailsSuccess,
   IndexUsersSuccess,
@@ -18,7 +19,10 @@ const SALT_ROUNDS = 10;
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly mailService: MailService,
+    private readonly usersRepository: UsersRepository,
+  ) {}
 
   async getAllUser(): Promise<IndexUsersSuccess[]> {
     const res = await this.usersRepository.findAllUsers();
@@ -50,7 +54,39 @@ export class UsersService {
       throw new BadRequestException(UserErrors.USER_CREATE_ERROR);
     }
     this.removeUserPassword(user);
+    await this.sendEmailVerification({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    });
     return user;
+  }
+
+  async verifyUserEmail(id: string) {
+    const user = await this.usersRepository.updateUser(id, {
+      emailVerified: true,
+    });
+    if (!user) {
+      throw new BadRequestException(UserErrors.USER_UPDATE_ERROR);
+    }
+    this.removeUserPassword(user);
+    return user;
+  }
+
+  async sendEmailVerification({
+    id,
+    username,
+    email,
+  }: {
+    id: string;
+    username: string;
+    email: string;
+  }) {
+    return await this.mailService.sendEmailVerification({
+      id,
+      username,
+      email,
+    });
   }
 
   private async hashPassword(password: string) {

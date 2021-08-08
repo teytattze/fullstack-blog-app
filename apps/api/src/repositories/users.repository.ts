@@ -91,4 +91,19 @@ export class UsersRepository {
       }
     }
   }
+
+  async updateUser(
+    userId: string,
+    data: Omit<Prisma.UserUpdateInput, 'id'>,
+  ): Promise<User> {
+    try {
+      return await this.prisma.user.update({
+        where: { id: userId },
+        data: { ...data },
+      });
+    } catch (err) {
+      this.logger.error(err);
+      return err;
+    }
+  }
 }

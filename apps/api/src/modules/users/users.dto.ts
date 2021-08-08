@@ -129,3 +129,8 @@ export class GetUserDetailsSuccess {
   @Type(() => IndexUserPostsSuccess)
   posts: IndexUserPostsSuccess[];
 }
+
+export class VerifyUserEmailParam {
+  @IsUUID('4')
+  id: string;
+}
