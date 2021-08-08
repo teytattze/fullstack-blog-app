@@ -187,7 +187,6 @@ export function PostItem({
           transition: 'all 0.4s ease-in-out',
           ':hover': {
             backgroundColor: 'background.paper',
-            boxShadow: 5,
           },
         }}
       >

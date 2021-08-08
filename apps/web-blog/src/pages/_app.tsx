@@ -11,6 +11,7 @@ import { Layout } from '../components';
 import { SnackbarProvider } from 'src/shared/contexts/snackbar.context';
 import { AuthProvider } from 'src/modules/auth/auth.provider';
 import 'src/lib/interceptor';
+import 'src/styles/globals.css';
 
 const cache = createCache({ key: 'css', prepend: true });
 cache.compat = true;
